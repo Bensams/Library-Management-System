@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  Copyright (c) 2015, 2019, Gluon and/or its affiliates.
+  All rights reserved. Use is subject to license terms.
+
+  This file is available and licensed under the following license:
+
+  Redistribution and use in source and binary forms, with or without
+  modification, are permitted provided that the following conditions
+  are met:
+
+  - Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+  - Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in
+    the documentation and/or other materials provided with the distribution.
+  - Neither the name of Oracle Corporation nor the names of its
+    contributors may be used to endorse or promote products derived
+    from this software without specific prior written permission.
+
+  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+  A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+  OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+  SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+  LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+  DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.digitallibrarymanagementsystem.SetupAdmin">
+   <children>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="850.0" layoutX="20.0" layoutY="-411.0" rotate="57.0" stroke="BLACK" strokeLineCap="ROUND" strokeMiterLimit="5.0" strokeType="INSIDE" strokeWidth="0.0" width="380.0">
+         <fill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="0.4287280738353729" green="0.9078947305679321" blue="0.8519919514656067" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.16898147761821747" green="0.5" blue="0.4834490716457367" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Rectangle>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" height="850.0" layoutX="201.0" layoutY="-73.0" rotate="57.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="380.0">
+         <fill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="1.0" green="0.3019607961177826" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.6710526347160339" green="0.22798185050487518" blue="0.05281432718038559" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Rectangle>
+      <Button layoutX="239.0" layoutY="240.0" minHeight="20.0" mnemonicParsing="false" onAction="#onCreateAccountBtnClick" prefHeight="33.0" prefWidth="122.0" style="-fx-background-color: #3d1009; -fx-font-size: 15; -fx-background-radius: 20; -fx-border-radius: 20;" text="Create Account" textFill="WHITE">
+         <font>
+            <Font name="Bernard MT Condensed" size="26.0" />
+         </font>
+      </Button>
+      <TextField fx:id="name_TF" layoutX="224.0" layoutY="114.0" promptText="Name:" style="-fx-background-color: #FFF; -fx-border-radius: 20; -fx-background-radius: 20;" />
+      <TextField fx:id="username_TF" layoutX="224.0" layoutY="152.0" promptText="Username:" style="-fx-background-color: #FFF; -fx-border-radius: 20; -fx-background-radius: 20;" />
+      <Label layoutX="195.0" layoutY="42.0" text="Setup Admin">
+         <font>
+            <Font name="Bell MT Bold" size="37.0" />
+         </font>
+      </Label>
+      <PasswordField fx:id="password_PF" layoutX="224.0" layoutY="187.0" promptText="Password:" style="-fx-background-color: #FFF; -fx-background-radius: 20; -fx-border-radius: 20;" />
+      <Label fx:id="message_LBL" alignment="CENTER" contentDisplay="CENTER" layoutX="202.0" layoutY="288.0" style="-fx-background-color: #FFF; -fx-background-radius: 5; -fx-text-fill: RED; -fx-label-padding: 3;" textAlignment="CENTER" />
+   </children>
+</AnchorPane>
