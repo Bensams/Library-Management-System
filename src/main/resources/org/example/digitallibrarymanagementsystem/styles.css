@@ -1,0 +1,44 @@
+/* styles.css */
+
+
+.root {
+    /* -fx-border-color: #ffffff;  Change the border color to blue */
+    -fx-border-width: 2;
+    -fx-border-style: none;
+    -fx-background-radius: 20; /* Rounded corners for background */
+    -fx-border-radius: 10; /* Rounded corners for border */
+    -fx-background-color: linear-gradient(to bottom, #FFA500, #FF4500);
+}
+
+.label {
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+}
+
+.btn {
+    -fx-background-color: #FF4500;
+    -fx-text-fill: white;
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+    -fx-background-radius: 20;
+    -fx-border-radius: 10;
+}
+
+.txt {
+    -fx-font-size: 35;
+    -fx-font-weight: bold; /* Changed from SemiBold to bold */
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-font-family: 'Playfair Display';
+    -fx-text-fill: #000000;
+}
+
+.txtField {
+    -fx-font-size: 15;
+    -fx-font-weight: bold; /* Changed from SemiBold to bold */
+    -fx-background-radius: 20;
+    -fx-border-radius: 10;
+    -fx-font-family: 'Playfair Display';
+    -fx-text-fill: #000000;
+    -fx-opacity: 0.8;
+}

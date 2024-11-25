@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Arc?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: F96E2A;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.digitallibrarymanagementsystem.StartController">
+   <children>
+      <Arc fill="#163835" layoutX="573.0" layoutY="203.0" length="270.0" radiusX="222.0" radiusY="222.0" startAngle="45.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" />
+      <Arc fill="#00478f" layoutX="608.0" layoutY="199.0" length="270.0" radiusX="222.0" radiusY="222.0" startAngle="45.0" stroke="BLACK" strokeType="INSIDE" type="ROUND" />
+      <Arc layoutX="631.0" layoutY="200.0" length="270.0" radiusX="213.0" radiusY="213.0" startAngle="45.0" stroke="BLACK" strokeType="INSIDE" type="ROUND">
+         <fill>
+            <LinearGradient endX="1.0" endY="1.0">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="1.0" green="0.5" />
+                     </color>
+                  </Stop>
+                  <Stop offset="0.9932885906040269">
+                     <color>
+                        <Color red="0.9868420958518982" green="0.9103161692619324" blue="0.6807383298873901" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="0.9210526347160339" green="0.7131761908531189" blue="0.08954678475856781" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Arc>
+      <ImageView fitHeight="213.0" fitWidth="213.0" layoutX="493.0" layoutY="93.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../Pictures/SystemLogo.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="33.0" layoutY="93.0" />
+      <Circle layoutX="65.0" layoutY="333.0" opacity="0.8" radius="100.0" stroke="BLACK" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="0.0">
+         <fill>
+            <LinearGradient endX="0.5761904761904761" endY="0.6" startX="0.40476190476190477">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="1.0" green="0.4012738764286041" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="0.6305732727050781" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Circle>
+      <Circle layoutX="191.0" layoutY="193.0" opacity="0.8" radius="57.0" stroke="BLACK" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="0.0">
+         <fill>
+            <LinearGradient endX="0.5761904761904761" endY="0.6" startX="0.40476190476190477">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="1.0" green="0.4012738764286041" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="0.6305732727050781" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Circle>
+      <Text layoutX="47.0" layoutY="97.0" lineSpacing="5.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Welcome to Our Digital Library Management System" wrappingWidth="287.2841796875">
+         <font>
+            <Font name="Book Antiqua Bold" size="35.0" />
+         </font>
+      </Text>
+      <Button layoutX="47.0" layoutY="306.0" mnemonicParsing="false" onAction="#onLoginButtonClick" prefWidth="85.0" style="-fx-background-color: #000000; -fx-border-radius: 10;" stylesheets="@styles.css" text="Log In" textFill="WHITE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="156.0" layoutY="306.0" mnemonicParsing="false" prefWidth="85.0" style="-fx-background-color: #FFFFFF; -fx-border-radius: 10;" stylesheets="@styles.css" text="About Us">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
