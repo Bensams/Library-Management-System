@@ -1,6 +1,7 @@
 package org.example.Accounts;
 
 import org.example.Library.Book;
+import org.example.Library.BorrowedBook;
 import org.example.Management.SerializedManagement;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.util.stream.Collectors;
 public class Borrower extends User implements BorrowerInterface, Serializable {
     private static final long serialVersionUID = 1L; // Unique ID for versioning
     SerializedManagement serializedManagement = SerializedManagement.getInstance();
-    private List<Book> borrowedBooks = new ArrayList<>();
+    private List<BorrowedBook> borrowedBooks = new ArrayList<>();
 
     public Borrower(String userID, String name, String contactInfo, String username, String password) {
         super(userID, name, contactInfo,username, password,"Borrower");
@@ -60,20 +61,22 @@ public class Borrower extends User implements BorrowerInterface, Serializable {
 //        borrowedBooks.remove(borrowedBook);
 //    }
 
-    public List<Book> getBorrowedBooks() {
+    public List<BorrowedBook> getBorrowedBooks() {
         return borrowedBooks;
     }
-
-    // display borrowed books
-    public void displayBorrowedBooks() {
-        if (borrowedBooks.isEmpty()) {
-            System.out.println("No borrowed books.");
-        } else {
-            System.out.format("%-15s%-30s%-20s%-15s%-10s\n", "Book ID", "Title", "Author", "ISBN", "Availability");
-            for (Book book : borrowedBooks) {
-                System.out.format("%-15s%-30s%-20s%-15s%-10d\n", book.getBookID(), book.getTitle(), book.getAuthor(), book.getISBN(), book.getQuantity());
-            }
-        }
+    public void setBorrowedBooks(List<BorrowedBook> borrowedBooks) {
+        this.borrowedBooks = borrowedBooks;
     }
+    // display borrowed books
+//    public void displayBorrowedBooks() {
+//        if (borrowedBooks.isEmpty()) {
+//            System.out.println("No borrowed books.");
+//        } else {
+//            System.out.format("%-15s%-30s%-20s%-15s%-10s\n", "Book ID", "Title", "Author", "ISBN", "Availability");
+//            for (BorrowedBook book : borrowedBooks) {
+//                System.out.format("%-15s%-30s%-20s%-15s%-10d\n", book.getBookID(), book.getTitle(), book.getAuthor(), book.getISBN(), book.getQuantity());
+//            }
+//        }
+//    }
 
 }

@@ -140,6 +140,26 @@ public class SerializedManagement implements Serializable {
         return book;
     }
 
+    public void serializeBorrowedBook(User user, BorrowedBook borrowedBook) {
+        Map<User, List<BorrowedBook>> allBorrowedBooks = deserializeAllBorrowedBooks();
+        allBorrowedBooks.computeIfAbsent(user, k -> new ArrayList<>()).add(borrowedBook);
+        serializeAllBorrowedBooks(allBorrowedBooks);
+    }
+
+    public BorrowedBook deserializeBorrowedBook(User user, String bookID) {
+        Map<User, List<BorrowedBook>> allBorrowedBooks = deserializeAllBorrowedBooks();
+        List<BorrowedBook> userBorrowedBooks = allBorrowedBooks.get(user);
+
+        if (userBorrowedBooks != null) {
+            for (BorrowedBook borrowedBook : userBorrowedBooks) {
+                if (borrowedBook.getBookID().equals(bookID)) {
+                    return borrowedBook;
+                }
+            }
+        }
+        return null;
+    }
+
     public void serializeAllBorrowedBooks(Map<User, List<BorrowedBook>> borrowedBooks) {
         try (FileOutputStream fileOut = new FileOutputStream(borrowedBooksFile);
              ObjectOutputStream out = new ObjectOutputStream(fileOut)) {
@@ -150,21 +170,23 @@ public class SerializedManagement implements Serializable {
         }
     }
 
+    // Secure serialization and deserialization in SerializedManagement.java
     public Map<User, List<BorrowedBook>> deserializeAllBorrowedBooks() {
         Map<User, List<BorrowedBook>> allBorrowedBooks = new HashMap<>();
-
         if (borrowedBooksFile.length() == 0) {
-            allBorrowedBooks = new HashMap<>(); // Initialize allBorrowedBooks to an empty map if file is empty
-            return allBorrowedBooks;
+            return allBorrowedBooks; // Return empty map if file is empty
         }
-
         try (FileInputStream fileIn = new FileInputStream(borrowedBooksFile);
              ObjectInputStream in = new ObjectInputStream(fileIn)) {
-            allBorrowedBooks = (Map<User, List<BorrowedBook>>) in.readObject();
+            Object obj = in.readObject();
+            if (obj instanceof Map) {
+                allBorrowedBooks = (Map<User, List<BorrowedBook>>) obj;
+            } else {
+                throw new IOException("Data format is incorrect.");
+            }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
-
         return allBorrowedBooks;
     }
 

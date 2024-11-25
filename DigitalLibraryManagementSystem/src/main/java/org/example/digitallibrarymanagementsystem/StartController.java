@@ -18,6 +18,7 @@ private void onLoginButtonClick(ActionEvent event) {
         Parent root = fxmlLoader.load();
         Stage stage = new Stage();
         stage.setTitle("Login");
+        stage.setResizable(false);
         stage.setScene(new Scene(root));
         stage.show();
 

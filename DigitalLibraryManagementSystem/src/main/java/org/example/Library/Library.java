@@ -3,6 +3,7 @@ import org.example.Accounts.Borrower;
 import org.example.Accounts.User;
 import org.example.Management.SerializedManagement;
 import org.example.Strategy.SearchStrategy;
+import org.example.digitallibrarymanagementsystem.ManageBorrower;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,6 +20,11 @@ public class Library {
     private SearchStrategy searchStrategy;
     private Map<User, List<BorrowedBook>> allBorrowedBooks;
     private Borrower currentBorrower;
+    private ManageBorrower manageBorrower;
+
+    public void setManageBorrower(ManageBorrower manageBorrower) {
+        this.manageBorrower = manageBorrower;
+    }
 
      // constructor
     public Library() {
@@ -36,6 +42,7 @@ public class Library {
     }
 
     public void setCurrentBorrower(Borrower borrower) {
+        this.allBorrowedBooks = serializedManagement.deserializeAllBorrowedBooks();
         this.currentBorrower = borrower;
     }
 
@@ -61,17 +68,46 @@ public class Library {
 
     // Existing methods...
 
-    public void borrowBook(Book book) {
-        if (books.contains(book) && book.getQuantity() > 0) {
-            book.setQuantity(book.getQuantity() - 1);
-            BorrowedBook borrowedBook = new BorrowedBook(currentBorrower.getUserID(), currentBorrower.getName(), book.getBookID(), book.getTitle(), book.getAuthor(), book.getISBN(), LocalDate.now());
+    public boolean borrowBook(Book book) {
+        this.books = serializedManagement.deserializedBooks();
+
+        if (currentBorrower == null) {
+            System.out.println("Current borrower is not set.");
+            return false;
+        }
+
+        Book bookToBorrow = books.stream()
+                .filter(b -> b.getBookID().equals(book.getBookID()))
+                .findFirst()
+                .orElse(null);
+
+        if (bookToBorrow != null && bookToBorrow.getQuantity() > 0) {
+            bookToBorrow.setQuantity(bookToBorrow.getQuantity() - 1);
+            BorrowedBook borrowedBook = new BorrowedBook(currentBorrower.getUserID(), currentBorrower.getName(), bookToBorrow.getBookID(), bookToBorrow.getTitle(), bookToBorrow.getAuthor(), bookToBorrow.getISBN(), LocalDate.now());
             allBorrowedBooks.computeIfAbsent(currentBorrower, k -> new ArrayList<>()).add(borrowedBook);
-            serializedManagement.serializedBooks(books);
+            serializedManagement.updateBook(bookToBorrow);
             serializedManagement.serializeAllBorrowedBooks(allBorrowedBooks);
+            currentBorrower.getBorrowedBooks().add(borrowedBook);
+
+            System.out.println("Book successfully borrowed: " + bookToBorrow.getTitle());
+
+            if (manageBorrower != null) {
+                manageBorrower.refreshAllTable();
+            }
+
+            this.books = serializedManagement.deserializedBooks();
+            this.allBorrowedBooks = serializedManagement.deserializeAllBorrowedBooks();
+
+            return true;
+        } else {
+            System.out.println("Book not available or out of stock.");
+            return false;
         }
     }
 
     public void returnBook(Book book) {
+        this.allBorrowedBooks = serializedManagement.deserializeAllBorrowedBooks();
+
         List<BorrowedBook> borrowedBooks = allBorrowedBooks.get(currentBorrower);
         if (borrowedBooks != null) {
             BorrowedBook borrowedBook = borrowedBooks.stream()
@@ -79,16 +115,45 @@ public class Library {
                     .findFirst()
                     .orElse(null);
             if (borrowedBook != null) {
-                book.setQuantity(book.getQuantity() + 1);
-                borrowedBooks.remove(borrowedBook);
-                serializedManagement.serializedBooks(books);
-                serializedManagement.serializeAllBorrowedBooks(allBorrowedBooks);
+                Book bookToReturn = books.stream()
+                        .filter(b -> b.getBookID().equals(book.getBookID()))
+                        .findFirst()
+                        .orElse(null);
+
+                if (bookToReturn != null) {
+                    bookToReturn.setQuantity(bookToReturn.getQuantity() + 1);
+                    borrowedBooks.remove(borrowedBook);
+                    currentBorrower.getBorrowedBooks().remove(borrowedBook);
+                    serializedManagement.updateBook(bookToReturn);
+                    serializedManagement.serializeAllBorrowedBooks(allBorrowedBooks);
+
+                    System.out.println("Book successfully returned: " + bookToReturn.getTitle());
+                    this.books = serializedManagement.deserializedBooks();
+                    this.allBorrowedBooks = serializedManagement.deserializeAllBorrowedBooks();
+
+                    if (manageBorrower != null) {
+                        manageBorrower.refreshAllTable();
+                    }
+                }
             }
         }
     }
 
+    public List<Book> getAvailableBooks() {
+        this.books = serializedManagement.deserializedBooks();
+        return books.stream()
+                .filter(book -> book.getQuantity() > 0)
+                .collect(Collectors.toList());
+    }
+
     public Map<User, List<BorrowedBook>> trackBorrowedBooks() {
         return allBorrowedBooks;
+    }
+
+    // Track borrowed books by a specific user
+    public List<BorrowedBook> getBorrowedBooksByUser(User user) {
+        this.allBorrowedBooks = serializedManagement.deserializeAllBorrowedBooks();
+        return allBorrowedBooks.getOrDefault(user, new ArrayList<>());
     }
 
     // getBookbyID
@@ -129,18 +194,6 @@ public class Library {
         }
     }
 
-//    public void displayAllBorrowedBooks() {
-//        System.out.format("%-15s%-20s%-12s%-20s%-15s%-20s\n", "User ID", "User Name", "Book ID", "Title", "Author", "ISBN");
-//        System.out.println("------------------------------------------------------------------------------------------------------------------------");
-//        for (Map.Entry<User, List<BorrowedBook>> entry : allBorrowedBooks.entrySet()) {
-//            User user = entry.getKey();
-//            List<Book> books = entry.getValue();
-//            for (Book book : books) {
-//                System.out.format("%-15s%-20s%-12s%-20s%-15s%-20s\n", user.getUserID(), user.getName(), book.getBookID(), book.getTitle(), book.getAuthor(), book.getISBN());
-//            }
-//        }
-//    }
-
     public String generateSummary() {
         StringBuilder summary = new StringBuilder();
         summary.append("Available Books:\n");
@@ -171,23 +224,6 @@ public class Library {
         return summary.toString();
     }
 
-    // Track borrowed books by a specific user
-    public List<BorrowedBook> getBorrowedBooksByUser(User user) {
-        return allBorrowedBooks.getOrDefault(user, new ArrayList<>());
-    }
-
-    // Display borrowed books by a specific user
-//    public void displayBorrowedBooksByUser() {
-//        List<BorrowedBook> borrowedBooksByUser = getBorrowedBooksByUser(currentBorrower);
-//        if (borrowedBooksByUser.isEmpty()) {
-//            System.out.println("No borrowed books for user: " + currentBorrower.getName());
-//        } else {
-//            System.out.format("%-15s%-30s%-20s%-15s%-10s\n", "Book ID", "Title", "Author", "ISBN", "Availability");
-//            for (BorrowedBook book : borrowedBooksByUser) {
-//                System.out.format("%-15s%-30s%-20s%-15s%-10d\n", book.getBookID(), book.getTitle(), book.getAuthor(), book.getISBN(), book.getQuantity());
-//            }
-//        }
-//    }
 
     public boolean bookExists(String bookID) {
         for (Book book : books) {

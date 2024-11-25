@@ -1,53 +1,54 @@
 package org.example.Library;
 
-import javafx.beans.property.SimpleStringProperty;
-
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class BorrowedBook {
-    private SimpleStringProperty userID;
-    private SimpleStringProperty userName;
-    private SimpleStringProperty bookID;
-    private SimpleStringProperty title;
-    private SimpleStringProperty author;
-    private SimpleStringProperty isbn;
-    private SimpleStringProperty borrowedDate;
+public class BorrowedBook implements Serializable {
+    private static final long serialVersionUID = 1L; // Unique ID for versioning
+
+    private String userID;
+    private String userName;
+    private String bookID;
+    private String title;
+    private String author;
+    private String isbn;
+    private String borrowedDate;
 
     public BorrowedBook(String userID, String userName, String bookID, String title, String author, String isbn, LocalDate borrowedDate) {
-        this.userID = new SimpleStringProperty(userID);
-        this.userName = new SimpleStringProperty(userName);
-        this.bookID = new SimpleStringProperty(bookID);
-        this.title = new SimpleStringProperty(title);
-        this.author = new SimpleStringProperty(author);
-        this.isbn = new SimpleStringProperty(isbn);
-        this.borrowedDate = new SimpleStringProperty(borrowedDate.toString());
+        this.userID = userID;
+        this.userName = userName;
+        this.bookID = bookID;
+        this.title = title;
+        this.author = author;
+        this.isbn = isbn;
+        this.borrowedDate = borrowedDate.toString();
     }
 
     public String getUserID() {
-        return userID.get();
+        return userID;
     }
 
     public String getUserName() {
-        return userName.get();
+        return userName;
     }
 
     public String getBookID() {
-        return bookID.get();
+        return bookID;
     }
 
     public String getTitle() {
-        return title.get();
+        return title;
     }
 
     public String getAuthor() {
-        return author.get();
+        return author;
     }
 
     public String getISBN() {
-        return isbn.get();
+        return isbn;
     }
 
     public String getBorrowedDate() {
-        return borrowedDate.get();
+        return borrowedDate;
     }
 }

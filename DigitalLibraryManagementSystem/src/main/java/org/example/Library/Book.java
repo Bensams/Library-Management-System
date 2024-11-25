@@ -1,6 +1,7 @@
 package org.example.Library;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class Book implements Serializable {
     private static final long serialVersionUID = 1L; // Unique ID for versioning
@@ -31,6 +32,19 @@ public class Book implements Serializable {
     }
 
     // Getters and Setters
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return Objects.equals(bookID, book.bookID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(bookID);
+    }
 
     public int getQuantity() {
         return quantity;

@@ -149,7 +149,7 @@ public class ManageLibrary {
                     onBookSelected(newValue);
                 }
             });
-
+            refreshAvailableBooks();
         } catch (Exception e) {
             e.printStackTrace();
             // Optionally, display an error message to the user
@@ -187,7 +187,7 @@ public class ManageLibrary {
             stage.setResizable(false);
             stage.setScene(new Scene(root));
             stage.show();
-
+            refreshAvailableBooks();
             // Add a listener to refresh the table when the update window is closed
             stage.setOnHiding(event -> refreshBookTable());
         } catch (IOException e) {
@@ -408,6 +408,16 @@ public class ManageLibrary {
         }
     }
 
+    private boolean areFieldsValid(String... fields) {
+        for (String field : fields) {
+            if (field == null || field.trim().isEmpty()) {
+                return false;
+            }
+            // Add more specific validation if needed (e.g., regex for email, etc.)
+        }
+        return true;
+    }
+
     /**
      * Handles the register user button click event.
      */
@@ -415,14 +425,14 @@ public class ManageLibrary {
     private void onRegisterUserBtnClick() {
         UserManagement userManagement = new UserManagement(admin);
 
-        String userID = userID_TF.getText();
-        String name = name_TF.getText();
-        String contactInfo = contactInfo_TF.getText();
-        String username = username_TF.getText();
-        String password = password_TF.getText();
+        String userID = userID_TF.getText().trim();
+        String name = name_TF.getText().trim();
+        String contactInfo = contactInfo_TF.getText().trim();
+        String username = username_TF.getText().trim();
+        String password = password_TF.getText().trim();
         String role = role_CB.getValue();
 
-        if (areFieldsEmpty(userID, name, contactInfo, username, password, role)) {
+        if (!areFieldsValid(userID, name, contactInfo, username, password, role)) {
             displayRegisterMessage(ERROR_ALL_FIELDS_REQUIRED, javafx.scene.paint.Color.RED);
             return;
         }
@@ -626,8 +636,11 @@ public class ManageLibrary {
     }
 
     private void refreshAvailableBooks() {
+        initializeBookTableColumns();
+        initializeBorrowedBooksTableColumns();
         bookTableView.setItems(getBookList());
         borrowedBooksTableView.setItems(getBorrowedBooksList());
+
         displayRegisterMessage("Tables refreshed successfully.", javafx.scene.paint.Color.GREEN);
     }
 
@@ -636,8 +649,10 @@ public class ManageLibrary {
      * @return An observable list of books.
      */
     private ObservableList<Book> getBookList() {
-        return FXCollections.observableArrayList(new BookManagement().getAvailableBooks());
+        return FXCollections.observableArrayList(Library.getInstance().getAvailableBooks());
     }
+
+
 
     /**
      * Retrieves the list of borrowed books.
@@ -649,7 +664,7 @@ public class ManageLibrary {
         ObservableList<BorrowedBook> borrowedBooksList = FXCollections.observableArrayList();
 
         if (borrowedBooksMap == null || borrowedBooksMap.isEmpty()) {
-            borrowMsg_LBL.setText(ERROR_NO_BORROWED_BOOKS);
+            borrowMsg_LBL.setText("No borrowed books found!");
             return borrowedBooksList;
         }
 

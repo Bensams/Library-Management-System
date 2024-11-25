@@ -42,6 +42,8 @@ public class LoginController {
             Scene libraryScene = new Scene(libraryRoot);
             Stage primaryStage = (Stage) signIn_LBL.getScene().getWindow();
             primaryStage.setScene(libraryScene);
+            primaryStage.setTitle("Library Management System");
+            primaryStage.setResizable(false);
             primaryStage.show(); // Ensure the stage is shown
         } catch (IOException e) {
             e.printStackTrace();
@@ -50,18 +52,16 @@ public class LoginController {
 
     private void manageBorrower(Borrower borrower) {
         try {
-            Parent borrowerRoot = FXMLLoader.load(getClass().getResource("manageBorrower.fxml"));
-            if (borrowerRoot == null) {
-                throw new NullPointerException("manageBorrower.fxml not found");
-            }
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("UserInterfaceGUI/BorrowerInterface.fxml"));
+            loader.setController(new ManageBorrower(borrower));
+            Parent borrowerRoot = loader.load();
             Scene borrowerScene = new Scene(borrowerRoot);
             Stage primaryStage = (Stage) signIn_LBL.getScene().getWindow();
-            if (primaryStage == null) {
-                throw new NullPointerException("Primary stage not found");
-            }
             primaryStage.setScene(borrowerScene);
-            ManageBorrower manageBorrower = new ManageBorrower(borrower);
-        } catch (IOException | NullPointerException e) {
+            primaryStage.setTitle("Library Borrower System");
+            primaryStage.setResizable(false);
+            primaryStage.show();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
