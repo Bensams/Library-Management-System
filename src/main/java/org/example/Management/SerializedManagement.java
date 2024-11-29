@@ -19,7 +19,7 @@ public class SerializedManagement implements Serializable {
 
     private File userFile = new File("src/main/resources/Data/UsersData.ser");
     private File bookFile = new File("src/main/resources/Data/BooksData.ser");
-    private File borrowedBooksFile = new File("src/main/resources/Data/BorrowedBooks.ser");
+    private File borrowedBooksFile = new File("src/main/resources/Data/AllBorrowedBooks.ser");
 
     private SerializedManagement() {
         createFileIfNotExists(userFile);
@@ -170,6 +170,7 @@ public Map<User, List<BorrowedBook>> deserializeAllBorrowedBooks() {
     }
 
     public List<User> getUsers() {
+        users = deserializeUsers();
         return users;
     }
 

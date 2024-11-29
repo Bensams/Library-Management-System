@@ -1,6 +1,7 @@
 // ManageBorrower.java
 package org.example.digitallibrarymanagementsystem;
 
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -12,11 +13,15 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import org.example.Accounts.Borrower;
 import org.example.Library.Book;
 import org.example.Library.BorrowedBook;
 import org.example.Library.Library;
 import org.example.Management.SerializedManagement;
+import org.example.Strategy.AuthorSearchStrategy;
+import org.example.Strategy.ISBNSearchStrategy;
+import org.example.Strategy.TitleSearchStrategy;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -25,6 +30,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ManageBorrower {
+
+    @FXML
+    private TextField searchField;
+    @FXML
+    private ComboBox<String> searchTypeComboBox;
+
     @FXML
     private TableView<BorrowedBook> borrowedBooksTableView;
     @FXML
@@ -61,12 +72,18 @@ public class ManageBorrower {
 
     @FXML
     private void initialize() {
+        initializeSearchTypeComboBox();
         initializeBorrowedBookTableColumns();
         initializeAvailableBookTableColumns();
         borrowedBooksTableView.setItems(getBorrowedBooksList());
         availableBooksTableView.setItems(getAvailableBooksList());
         addReturnButtonToTable();
         addBorrowButtonToTable();
+    }
+
+    private void initializeSearchTypeComboBox() {
+        searchTypeComboBox.getItems().addAll("Title", "Author", "ISBN");
+        searchTypeComboBox.setValue("Title");
     }
 
     private void initializeBorrowedBookTableColumns() {
@@ -131,7 +148,12 @@ public class ManageBorrower {
             {
                 borrowButton.setOnAction(event -> {
                     Book book = getTableView().getItems().get(getIndex());
-                    showDueDateInputDialog(book);
+                    Library library = Library.getInstance();
+                    if (library.isBookAlreadyBorrowedByUser(book, borrower)) {
+                        showAlert("Borrow Error", "You have already borrowed this book.");
+                    } else {
+                        showDueDateInputDialog(book);
+                    }
                 });
             }
 
@@ -160,10 +182,11 @@ public class ManageBorrower {
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
 
-            // Set the book and borrower into the controller.
+            // Set the book, borrower, and manageBorrower into the controller.
             DueDateInputDialogController controller = loader.getController();
             controller.setBook(book);
             controller.setBorrower(borrower);
+            controller.setManageBorrower(this);
 
             // Show the dialog and wait until the user closes it.
             dialogStage.showAndWait();
@@ -181,11 +204,15 @@ public class ManageBorrower {
         alert.showAndWait();
     }
 
+    public void displayAvailableBooks() {
+        initializeAvailableBookTableColumns();
+        availableBooksTableView.setItems(getAvailableBooksList());
+    }
+
     public void refreshAllTable() {
         initializeBorrowedBookTableColumns();
-        initializeAvailableBookTableColumns();
         borrowedBooksTableView.setItems(getBorrowedBooksList());
-        availableBooksTableView.setItems(getAvailableBooksList());
+        displayAvailableBooks();
         addReturnButtonToTable();
         addBorrowButtonToTable();
     }
@@ -196,9 +223,50 @@ public class ManageBorrower {
         borrower.setBorrowedBooks(borrowedBooks);
     }
 
+    public void displayResultMessage(String message, javafx.scene.paint.Color color) {
+        resultsLabel.setTextFill(color);
+        resultsLabel.setText(message);
+        clearRegisterMsgAfterDelay();
+    }
+
+    private void clearRegisterMsgAfterDelay() {
+        PauseTransition pause = new PauseTransition(Duration.seconds(3));
+        pause.setOnFinished(event -> resultsLabel.setText(""));
+        pause.play();
+    }
+
     @FXML
     private void onSearchBtnClick() {
-        // Implementation for search button click
+        String query = searchField.getText();
+        String searchType = searchTypeComboBox.getValue();
+        setSearchStrategy(searchType);
+        List<Book> searchResults = Library.getInstance().searchBooks(query);
+        displaySearchResults(searchResults);
+    }
+
+    private void setSearchStrategy(String searchType) {
+        switch (searchType) {
+            case "Title":
+                Library.getInstance().setSearchStrategy(new TitleSearchStrategy());
+                break;
+            case "Author":
+                Library.getInstance().setSearchStrategy(new AuthorSearchStrategy());
+                break;
+            case "ISBN":
+                Library.getInstance().setSearchStrategy(new ISBNSearchStrategy());
+                break;
+        }
+    }
+
+    private void displaySearchResults(List<Book> searchResults) {
+        if (searchResults.isEmpty()) {
+            displayResultMessage("No book found.", javafx.scene.paint.Color.RED);
+            displayAvailableBooks();
+        } else {
+            ObservableList<Book> books = FXCollections.observableArrayList(searchResults);
+            availableBooksTableView.setItems(books);
+            displayResultMessage(searchResults.size() + " books found available.", javafx.scene.paint.Color.GREEN);
+        }
     }
 
     @FXML

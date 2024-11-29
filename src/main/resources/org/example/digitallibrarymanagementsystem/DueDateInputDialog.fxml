@@ -4,9 +4,9 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.digitallibrarymanagementsystem.DueDateInputDialogController">
+<AnchorPane prefHeight="76.0" prefWidth="214.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.digitallibrarymanagementsystem.DueDateInputDialogController">
     <children>
-        <DatePicker fx:id="dueDatePicker" layoutX="14.0" layoutY="14.0" prefWidth="200.0" />
-        <Button layoutX="14.0" layoutY="50.0" mnemonicParsing="false" onAction="#onConfirmBtnClick" text="Confirm" />
+        <DatePicker fx:id="dueDatePicker" layoutX="7.0" layoutY="14.0" prefWidth="200.0" />
+        <Button layoutX="72.0" layoutY="45.0" mnemonicParsing="false" onAction="#onConfirmBtnClick" text="Confirm" />
     </children>
 </AnchorPane>

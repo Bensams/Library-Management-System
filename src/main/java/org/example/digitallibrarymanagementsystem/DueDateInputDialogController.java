@@ -16,6 +16,7 @@ public class DueDateInputDialogController {
 
     private Book book;
     private Borrower borrower;
+    private ManageBorrower manageBorrower;
 
     public void setBook(Book book) {
         this.book = book;
@@ -25,15 +26,19 @@ public class DueDateInputDialogController {
         this.borrower = borrower;
     }
 
+    public void setManageBorrower(ManageBorrower manageBorrower) {
+        this.manageBorrower = manageBorrower;
+    }
+
     @FXML
     private void onConfirmBtnClick() {
         LocalDate dueDate = dueDatePicker.getValue();
-        if (dueDate != null && dueDate.isBefore(LocalDate.now().plusWeeks(2))) {
+        if (dueDate != null && !dueDate.isBefore(LocalDate.now()) && dueDate.isBefore(LocalDate.now().plusWeeks(2))) {
             Library.getInstance().borrowBook(book, borrower, dueDate);
             Stage stage = (Stage) dueDatePicker.getScene().getWindow();
             stage.close();
         } else {
-            System.out.println("Due date must be within 2 weeks from today.");
+            manageBorrower.displayResultMessage("Due date must be within 2 weeks from today and cannot be a past date.", javafx.scene.paint.Color.RED);
         }
     }
 }

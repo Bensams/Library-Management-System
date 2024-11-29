@@ -96,7 +96,7 @@
                         <Insets top="10.0" />
                      </padding>
                   </TextFlow>
-                  <Button layoutX="520.0" layoutY="22.0" mnemonicParsing="false" onAction="#onRefreshBtnClick" prefHeight="27.0" prefWidth="68.0" style="-fx-background-color: #FFF;" text="Refresh" />
+                  <Button layoutX="520.0" layoutY="22.0" mnemonicParsing="false" onAction="#onRefreshBtnClick" prefHeight="27.0" prefWidth="68.0" style="-fx-background-color: #FFF;" text="Refresh" wrapText="true" />
                </children>
             </AnchorPane>
          </top>

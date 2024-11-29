@@ -9,6 +9,7 @@ import org.example.digitallibrarymanagementsystem.ManageBorrower;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -110,38 +111,65 @@ public class Library {
         }
     }
 
-    public void returnBook(BorrowedBook book) {
+    public void returnBook(BorrowedBook borrowedBook) {
+        System.out.println("Attempting to return book: " + borrowedBook.getTitle());
         this.allBorrowedBooks = serializedManagement.deserializeAllBorrowedBooks();
 
-        List<BorrowedBook> borrowedBooks = allBorrowedBooks.get(currentBorrower);
+
+        if (currentBorrower == null) {
+            System.out.println("Current borrower is not set.");
+            return;
+        } else {
+            currentBorrower.setBorrowedBooks(serializedManagement.deserializeBorrowedBooksByUser(currentBorrower));
+        }
+
+        List<BorrowedBook> borrowedBooks = currentBorrower.getBorrowedBooks();
+
         if (borrowedBooks != null) {
-            BorrowedBook borrowedBook = borrowedBooks.stream()
-                    .filter(b -> b.getBookID().equals(book.getBookID()))
+            BorrowedBook bookToReturn = borrowedBooks.stream()
+                    .filter(b -> b.getBookID().equals(borrowedBook.getBookID()))
                     .findFirst()
                     .orElse(null);
-            if (borrowedBook != null) {
-                Book bookToReturn = books.stream()
-                        .filter(b -> b.getBookID().equals(book.getBookID()))
+            if (bookToReturn != null) {
+                Book book = books.stream()
+                        .filter(b -> b.getBookID().equals(borrowedBook.getBookID()))
                         .findFirst()
                         .orElse(null);
 
-                if (bookToReturn != null) {
-                    bookToReturn.setQuantity(bookToReturn.getQuantity() + 1);
-                    borrowedBooks.remove(borrowedBook);
-                    currentBorrower.getBorrowedBooks().remove(borrowedBook);
-                    serializedManagement.updateBook(bookToReturn);
+                if (book != null) {
+
+                    currentBorrower.setBorrowedBooks(borrowedBooks);
+
+                    book.setQuantity(book.getQuantity() + 1);
+                    borrowedBooks.remove(bookToReturn);
+
+                    allBorrowedBooks.put(currentBorrower, borrowedBooks); // Update the map
+                    currentBorrower.getBorrowedBooks().remove(bookToReturn);
+                    serializedManagement.updateBook(book);
                     serializedManagement.serializeAllBorrowedBooks(allBorrowedBooks);
+
                     serializedManagement.serializeUsers(users);
                     serializedManagement.serializeBorrowedBooksByUser(currentBorrower, currentBorrower.getBorrowedBooks());
 
-                    System.out.println("Book successfully returned: " + bookToReturn.getTitle());
+                    System.out.println("Book successfully returned: " + book.getTitle());
 
                     if (manageBorrower != null) {
                         manageBorrower.refreshAllTable();
                     }
+                } else {
+                    System.out.println("Book not found.");
                 }
+            } else {
+                System.out.println("Borrowed book not found in the borrower's list.");
             }
+        } else {
+            System.out.println("No borrowed books found for the current borrower.");
         }
+    }
+
+    public boolean isBookAlreadyBorrowedByUser(Book book, Borrower borrower) {
+        List<BorrowedBook> borrowedBooks = getBorrowedBooksByUser(borrower);
+        return borrowedBooks.stream().anyMatch(borrowedBook -> borrowedBook.getBookID().equals(book.getBookID()));
     }
 
     public List<Book> getAvailableBooks() {
@@ -152,6 +180,8 @@ public class Library {
     }
 
     public Map<User, List<BorrowedBook>> trackBorrowedBooks() {
+        allBorrowedBooks = serializedManagement.deserializeAllBorrowedBooks();
+
         return allBorrowedBooks;
     }
 
@@ -240,4 +270,10 @@ public class Library {
         this.users = serializedManagement.deserializeUsers();
         return users;
     }
+
+    public Map<User, List<BorrowedBook>> getAllBorrowedBooks() {
+        this.allBorrowedBooks = serializedManagement.deserializeAllBorrowedBooks();
+        return allBorrowedBooks;
+    }
+
 }

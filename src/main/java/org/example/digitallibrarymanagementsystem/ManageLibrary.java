@@ -519,7 +519,7 @@ private void addAccountAction() {
         }
         Library.getInstance().addBookToLibrary(new Book(bookID_TF.getText(), title_TF.getText(), author_TF.getText(), isbn_TF.getText(), publicationDate_TF.getValue().toString(), true, (int) counter_Sldr.getValue()));
         displayMessage(title_TF.getText() + SUCCESS_BOOK_ADDED, javafx.scene.paint.Color.GREEN);
-        refreshBorrowedBooksTable();
+        refreshBookTable();
     }
 
     private void displayMessage(String message, javafx.scene.paint.Color color) {
@@ -590,6 +590,7 @@ private void addAccountAction() {
      */
     private ObservableList<BorrowedBook> getBorrowedBooksList() {
         Library library = Library.getInstance();
+        UserManagement userManagement = new UserManagement();
         Map<User, List<BorrowedBook>> borrowedBooksMap = library.trackBorrowedBooks();
         ObservableList<BorrowedBook> borrowedBooksList = FXCollections.observableArrayList();
 
@@ -598,9 +599,14 @@ private void addAccountAction() {
             return borrowedBooksList;
         }
 
-        for (List<BorrowedBook> userBorrowedBooks : borrowedBooksMap.values()) {
-            if (userBorrowedBooks != null && !userBorrowedBooks.isEmpty()) {
-                borrowedBooksList.addAll(userBorrowedBooks);
+        for (Map.Entry<User, List<BorrowedBook>> entry : borrowedBooksMap.entrySet()) {
+            User user = entry.getKey();
+            List<BorrowedBook> userBorrowedBooks = entry.getValue();
+
+            if (user != null && userBorrowedBooks != null && !userBorrowedBooks.isEmpty()) {
+                if (userManagement.userExists(user.getUserID(), user.getUsername())) {
+                    borrowedBooksList.addAll(userBorrowedBooks);
+                }
             }
         }
         return borrowedBooksList;
