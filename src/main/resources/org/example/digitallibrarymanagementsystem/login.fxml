@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.TextFlow?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: linear-gradient(to bottom, #FF4500, #F96E2A);" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.digitallibrarymanagementsystem.LoginController">
+   <children>
+      <AnchorPane fx:id="loginForm_AP" layoutX="140.0" layoutY="40.0" prefHeight="337.0" prefWidth="324.0" style="-fx-background-color: #FC8F54;" styleClass="root" stylesheets="@styles.css">
+         <children>
+            <Label fx:id="signIn_LBL" layoutX="106.0" layoutY="28.0" styleClass="txt" text="Sign in">
+               <font>
+                  <Font name="System Bold Italic" size="65.0" />
+               </font>
+            </Label>
+            <Button fx:id="login_btn" alignment="CENTER" layoutX="98.0" layoutY="246.0" mnemonicParsing="false" onAction="#onSignInButtonClick" prefHeight="34.0" prefWidth="125.0" style="-fx-background-color: #3d1009;" styleClass="btn" stylesheets="@styles.css" text="Log In" textFill="WHITE" />
+            <PasswordField fx:id="password_PF" layoutX="79.0" layoutY="172.0" prefHeight="3.0" prefWidth="169.0" style="-fx-background-color: #FFFFFF;" styleClass="txtField" />
+            <Label layoutX="91.0" layoutY="90.0" prefHeight="17.0" prefWidth="114.0" style="-fx-font-size: 15; -fx-text-fill: #000;" text="Username">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
+            <Label layoutX="93.0" layoutY="154.0" prefHeight="17.0" prefWidth="114.0" style="-fx-font-size: 15; -fx-text-fill: #000;" text="Password">
+               <font>
+                  <Font size="11.0" />
+               </font>
+            </Label>
+            <TextField fx:id="username_ACTF" layoutX="79.0" layoutY="109.0" maxHeight="3.0" maxWidth="169.0" style="-fx-background-color: #FFF;" styleClass="txtField" />
+            <TextFlow layoutX="4.0" layoutY="206.0" prefHeight="34.0" prefWidth="320.0" textAlignment="CENTER">
+               <children>
+                  <Label fx:id="message_LBL" prefHeight="39.0" prefWidth="250.0" style="-fx-font-size: 13; -fx-text-fill: #000;" textAlignment="CENTER" wrapText="true">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Label>
+               </children>
+            </TextFlow>
+            <ProgressBar fx:id="loadingBar" layoutX="102.0" layoutY="295.0" prefHeight="20.0" prefWidth="125.0" progress="1.0" visible="false" />
+         </children></AnchorPane>
+      <Circle layoutX="29.0" layoutY="286.0" opacity="0.8" radius="100.0" stroke="BLACK" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="0.0">
+         <fill>
+            <LinearGradient endX="0.8" endY="0.4285714285714286">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="1.0" green="0.4012738764286041" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="0.6305732727050781" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Circle>
+      <Circle layoutX="83.0" layoutY="132.0" opacity="0.8" radius="54.0" stroke="BLACK" strokeLineCap="ROUND" strokeType="INSIDE" strokeWidth="0.0">
+         <fill>
+            <LinearGradient endX="0.45238095238095233" endY="0.35238095238095235">
+               <stops>
+                  <Stop>
+                     <color>
+                        <Color red="1.0" green="0.4012738764286041" />
+                     </color>
+                  </Stop>
+                  <Stop offset="1.0">
+                     <color>
+                        <Color red="1.0" green="0.6305732727050781" />
+                     </color>
+                  </Stop>
+               </stops>
+            </LinearGradient>
+         </fill>
+      </Circle>
+   </children>
+</AnchorPane>
